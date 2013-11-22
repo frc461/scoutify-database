@@ -16,6 +16,7 @@
 /tmp
 
 # Temporary files
+*#
 *~
 .*
 !.gitignore
