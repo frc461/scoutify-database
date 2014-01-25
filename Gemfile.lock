@@ -92,6 +92,7 @@ GEM
     multi_json (1.8.2)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
+    opr-calc (0.1.1)
     polyglot (0.3.3)
     pry (0.9.12.3)
       coderay (~> 1.0)
@@ -183,6 +184,7 @@ DEPENDENCIES
   guard-rspec
   jbuilder (~> 1.2)
   jquery-rails
+  opr-calc
   rails (= 4.0.0)
   rails_bootstrap_navbar (>= 1.0.1.pre1)
   rspec-rails
