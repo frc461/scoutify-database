@@ -55,3 +55,6 @@ group :test do
 	gem "capybara"
 	gem "guard-rspec"
 end
+
+# Our OPR Gem
+gem "opr-calc"
