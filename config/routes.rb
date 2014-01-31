@@ -1,4 +1,6 @@
 ScoutifyDatabase::Application.routes.draw do
+  resources :matches
+
 	get "welcome/index"
 	resources :records
 
