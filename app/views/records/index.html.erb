@@ -3,10 +3,8 @@
 <table>
   <thead>
     <tr>
-      <th>Data</th>
       <th>Team</th>
-      <th>Event</th>
-      <th>User</th>
+      <th>Match</th>
       <th></th>
       <th></th>
       <th></th>
@@ -16,10 +14,8 @@
   <tbody>
     <% @records.each do |record| %>
       <tr>
-        <td><%= record.data %></td>
-        <td><%= record.team_id %></td>
-        <td><%= record.event_id %></td>
-        <td><%= record.user_id %></td>
+        <td><%= record.team.name %></td>
+        <td><%= record.match.number %></td>
         <td><%= link_to 'Show', record %></td>
         <td><%= link_to 'Edit', edit_record_path(record) %></td>
         <td><%= link_to 'Destroy', record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
