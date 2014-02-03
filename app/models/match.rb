@@ -1,5 +1,5 @@
 class Match < ActiveRecord::Base
-	require 'net/http'
+	require "net/http"
 
 	has_many :records
 	belongs_to :event
@@ -62,4 +62,3 @@ class Match < ActiveRecord::Base
 		end
 	end
 end
-# It's like LISP parentheses

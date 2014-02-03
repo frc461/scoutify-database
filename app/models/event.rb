@@ -1,5 +1,5 @@
 class Event < ActiveRecord::Base
-	require 'net/http'
+	require "net/http"
 
 	belongs_to :game
 	has_many :matches
@@ -28,6 +28,7 @@ class Event < ActiveRecord::Base
 			teams_params = { teams: json["teams"].join(",") }
 			teams_uri.query = URI.encode_www_form teams_params
 			teams_res = Net::HTTP.get_response teams_uri
+			
 			unless teams_res.is_a?(Net::HTTPSuccess)
 				puts teams_res.uri
 				puts teams_res.code

@@ -1,5 +1,5 @@
 class Game < ActiveRecord::Base
-	require 'net/http'
+	require "net/http"
 
 	has_many :events
 	has_many :records
