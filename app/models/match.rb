@@ -7,14 +7,12 @@ class Match < ActiveRecord::Base
 	def tba_update(key, teams_json = nil)
 		uri = URI("http://www.thebluealliance.com/api/v1/match/details")
 		params = { match: key }
+
 		uri.query = URI.encode_www_form params
 		res = Net::HTTP.get_response uri
-		unless res.is_a? Net::HTTPSuccess
-			puts res.uri
-			puts res.code
-			puts res.body
-			raise "Error with TBA API"
-		end
+
+		raise "Error with TBA API:\nURI: #{res.uri}\nCode: #{res.code}\nBody: #{res.body}" unless res.is_a?(Net::HTTPSuccess)
+
 		json = MultiJson.load res.body
 
 		self.red_score  = json[0]["alliances"]["red"]["score"]
@@ -25,14 +23,12 @@ class Match < ActiveRecord::Base
 		unless teams_json
 			teams_uri = URI("http://www.thebluealliance.com/api/v1/teams/show")
 			teams_params = { teams: json[0]["team_keys"].join(",") }
+
 			teams_uri.query = URI.encode_www_form teams_params
 			teams_res = Net::HTTP.get_response teams_uri
-			unless teams_res.is_a?(Net::HTTPSuccess)
-				puts teams_res.uri
-				puts teams_res.code
-				puts teams_res.body
-				raise "Error with TBA API"
-			end
+
+			raise "Error with TBA API:\nURI: #{teams_res.uri}\nCode: #{teams_res.code}\nBody: #{teams_res.body}" unless teams_res.is_a?(Net::HTTPSuccess)
+
 			teams_json = MultiJson.load teams_res.body
 		end
 
