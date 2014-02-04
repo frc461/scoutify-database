@@ -34,8 +34,9 @@ class Match < ActiveRecord::Base
 
 		["red", "blue"].each do |team_color|
 			position_base_num = (team_color == "blue") ? 0 : 3
+			
 			json[0]["alliances"][team_color]["teams"].map do |team_key|
-				# sometimes TBA uses team keys like "frc973B", ignore these
+				# Sometimes TBA uses team keys like "frc973B"; ignore these.
 				if teams_json.detect { |t| t["key"] == team_key }
 					team_number = (teams_json.detect { |t| t["key"] == team_key })["team_number"]
 					team = Team.where(number: team_number).first
