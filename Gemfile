@@ -10,7 +10,7 @@ gem "sqlite3"
 gem "sass-rails", "~> 4.0.0"
 
 # Bootstrap components
-gem "bootstrap-sass"
+gem "bootstrap-sass", "< 3.1.0"
 gem "rails_bootstrap_navbar", ">= 1.0.1.pre1"
 
 # Use Uglifier as compressor for JavaScript assets
