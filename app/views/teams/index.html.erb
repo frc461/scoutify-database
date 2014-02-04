@@ -1,28 +1,32 @@
-<h1>Listing teams</h1>
+<% if @teams.count > 0 %>
+	<h1>Listing Teams</h1>
+	
+	<table>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Number</th>
+				<th></th>
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Number</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @teams.each do |team| %>
-      <tr>
-        <td><%= team.name %></td>
-        <td><%= team.number %></td>
-        <td><%= link_to 'Show', team %></td>
-        <td><%= link_to 'Edit', edit_team_path(team) %></td>
-        <td><%= link_to 'Destroy', team, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+		<tbody>
+			<% @teams.each do |team| %>
+				<tr>
+					<td><%= team.name %></td>
+					<td><%= team.number %></td>
+					<td><%= link_to 'Show', team %></td>
+					<td><%= link_to 'Edit', edit_team_path(team) %></td>
+					<td><%= link_to 'Destroy', team, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+<% else %>
+	<h1>No Teams</h1>
+<% end %>
 
 <br>
 
