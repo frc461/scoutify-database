@@ -1,5 +1,6 @@
 class Team < ActiveRecord::Base
 	require "net/http"
+	extend Error
 
 	validates :number, uniqueness: true
 

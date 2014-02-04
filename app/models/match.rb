@@ -1,5 +1,6 @@
 class Match < ActiveRecord::Base
 	require "net/http"
+	extend Error
 
 	has_many :records
 	belongs_to :event

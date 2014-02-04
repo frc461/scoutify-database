@@ -1,5 +1,6 @@
 class Game < ActiveRecord::Base
 	require "net/http"
+	extend Error
 
 	has_many :events
 	has_many :records
