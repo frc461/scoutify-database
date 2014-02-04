@@ -11,16 +11,9 @@ class Game < ActiveRecord::Base
 		uri.query = URI.encode_www_form params
 		res = Net::HTTP.get_response uri
 		
-		unless res.is_a? Net::HTTPSuccess
-			puts res.uri
-			puts res.code
-			puts res.body
-			raise "Error with TBA API"
-		end
+		raise "Error with TBA API:\nURI: #{res.uri}\nCode: #{res.code}\nBody: #{res.body}" unless res.is_a?(Net::HTTPSuccess)
 		
-		json = MultiJson.load res.body
-
-		json.each do |event_json|
+		MultiJson.load res.body.each do |event_json|
 			event = events.where(name: event_json["name"]).first
 			event ||= Event.create
 			event.tba_update event_json["key"]
