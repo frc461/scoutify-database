@@ -1,5 +1,6 @@
 class Event < ActiveRecord::Base
 	require "net/http"
+	extend Error
 
 	belongs_to :game
 	has_many :matches
@@ -12,7 +13,7 @@ class Event < ActiveRecord::Base
 		uri.query = URI.encode_www_form(params)
 		res = Net::HTTP.get_response(uri)
 		
-		raise "Error with TBA API:\nURI: #{res.uri}\nCode: #{res.code}\nBody: #{res.body}" unless res.is_a?(Net::HTTPSuccess)
+		tba_error(res.uri, res.code, res.body) unless res.is_a?(Net::HTTPSuccess)
 		
 		json = MultiJson.load(res.body)
 
@@ -28,7 +29,7 @@ class Event < ActiveRecord::Base
 			teams_uri.query = URI.encode_www_form teams_params
 			teams_res = Net::HTTP.get_response teams_uri
 			
-			raise "Error with TBA API:\nURI: #{teams_res.uri}\nCode: #{teams_res.code}\nBody: #{teams_res.body}" unless teams_res.is_a?(Net::HTTPSuccess)
+			tba_error(teams_res.uri, teams_res.code, teams_res.body) unless teams_res.is_a?(Net::HTTPSuccess)
 			
 			teams_json = MultiJson.load teams_res.body
 
