@@ -26,13 +26,13 @@
 	</head>
 
 	<body>
-	  <%= navbar :brand => "Scoutify Database", :fixed => :top, :responsive => true do %>
-	    <%= navbar_group do %>
-		  <%= navbar_item "Teams", teams_path %>
-		  <%= navbar_item "Games", games_path %>
-		  <%= navbar_item "Users", users_path %>
+		<%= navbar brand: "Scoutify Database", fixed: :top, responsive: true do %>
+			<%= navbar_group do %>
+				<%= navbar_item "Teams", teams_path %>
+				<%= navbar_item "Games", games_path %>
+				<%= navbar_item "Users", users_path %>
+			<% end %>
 		<% end %>
-      <% end %>
 
 		<div class="container">
 
