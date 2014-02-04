@@ -10,12 +10,14 @@ class Event < ActiveRecord::Base
 		params = { event: key }
 		uri.query = URI.encode_www_form(params)
 		res = Net::HTTP.get_response(uri)
+		
 		unless res.is_a?(Net::HTTPSuccess)
 			puts res.uri
 			puts res.code
 			puts res.body
 			raise "Error with TBA API"
 		end
+		
 		json = MultiJson.load(res.body)
 
 		self.name = json["name"]
@@ -35,22 +37,26 @@ class Event < ActiveRecord::Base
 				puts teams_res.body
 				raise "Error with TBA API"
 			end
+			
 			teams_json = MultiJson.load teams_res.body
 
 
 			json["teams"].each do |team_key|
 				team_number = (teams_json.detect { |t| t["key"] == team_key })["team_number"]
 				team = Team.where(number: team_number).first
+				
 				unless team
 					team = Team.create
 					team.tba_update team_key
 				end
+				
 				self.teams << team unless self.teams.include? team
 			end
 
 			json["matches"].each do |match_key|
 				match = self.matches.where(number: match_key.split("_")[1]).first
 				match ||= Match.create(event_id: id)
+				
 				match.tba_update(match_key, teams_json)
 			end
 		end
