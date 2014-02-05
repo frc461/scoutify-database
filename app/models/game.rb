@@ -12,7 +12,7 @@ class Game < ActiveRecord::Base
 		uri.query = URI.encode_www_form params
 		res = Net::HTTP.get_response uri
 		
-		tba_error(res.uri, res.code, res.body) unless res.is_a?(Net::HTTPSuccess)
+		class.tba_error(res.uri, res.code, res.body) unless res.is_a?(Net::HTTPSuccess)
 		
 		MultiJson.load res.body.each do |event_json|
 			event = events.where(name: event_json["name"]).first
