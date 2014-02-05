@@ -1,6 +1,6 @@
 class Event < ActiveRecord::Base
 	require "net/http"
-	extend Error
+	include Error
 
 	belongs_to :game
 	has_many :matches
