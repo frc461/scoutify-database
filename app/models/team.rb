@@ -15,7 +15,7 @@ class Team < ActiveRecord::Base
 		uri.query = URI.encode_www_form(params)
 		res = Net::HTTP.get_response(uri)
 
-		class.tba_error(res.uri, res.code, res.body) unless res.is_a?(Net::HTTPSuccess)
+		tba_error(res.uri, res.code, res.body) unless res.is_a?(Net::HTTPSuccess)
 
 		json = MultiJson.load(res.body)
 
