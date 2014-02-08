@@ -1,6 +1,6 @@
 module TBA
+	extend ActiveSupport::Concern
 	require "net/http"
-	include ActiveSupport::Concern
 
 	TBA_BASE_URL = "http://www.thebluealliance.com"
 	TBA_REQUEST_TYPE_TABLE = {
