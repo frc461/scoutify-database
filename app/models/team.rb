@@ -1,6 +1,6 @@
 class Team < ActiveRecord::Base
 	require "net/http"
-	include Error
+	include TBA
 
 	validates :number, uniqueness: true
 
@@ -9,11 +9,7 @@ class Team < ActiveRecord::Base
 
 	def tba_update(key = nil)
 		key ||= "frc" + number.to_s
-		uri = URI("http://www.thebluealliance.com/api/v1/team/details")
-		params = { team: key }
-
-		uri.query = URI.encode_www_form(params)
-		res = Net::HTTP.get_response(uri)
+		res = tba_request :team, key
 
 		tba_error(res.uri, res.code, res.body) unless res.is_a?(Net::HTTPSuccess)
 
