@@ -62,5 +62,6 @@ class Match < ActiveRecord::Base
 				end
 			end
 		end
+		self
 	end
 end

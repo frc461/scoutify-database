@@ -15,5 +15,6 @@ class Game < ActiveRecord::Base
 			event ||= Event.create
 			event.tba_update event_json["key"]
 		end
+		self
 	end
 end

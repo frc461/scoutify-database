@@ -37,12 +37,36 @@ class Event < ActiveRecord::Base
 				self.teams << team unless self.teams.include? team
 			end
 
+			matches_csv = json["matches"][0]
+			matches_json = []
+			json["matches"].drop(1).each do |match_key|
+				if (TBA_BASE_URL +
+				    TBA_REQUEST_TYPE_TABLE[:matches] +
+				    Rack::Utils.escape(matches_csv) +
+				    "%2C" +
+				    match_key).length > 2000
+
+					matches_res = tba_request :matches, matches_csv
+					tba_error(matches_res.uri, matches_res.code, matches_res.body) unless matches_res.is_a?(Net::HTTPSuccess)
+					matches_json += MultiJson.load matches_res.body
+					matches_csv = ""
+				else
+					matches_csv += ","
+				end
+				matches_csv += match_key
+			end
+
+			matches_res = tba_request :matches, matches_csv
+			tba_error(matches_res.uri, matches_res.code, matches_res.body) unless matches_res.is_a?(Net::HTTPSuccess)
+			matches_json += MultiJson.load matches_res.body
+
 			json["matches"].each do |match_key|
 				match = self.matches.where(number: match_key.split("_")[1]).first
 				match ||= Match.create(event_id: id)
-				
-				match.tba_update(match_key, teams_json)
+
+				match.tba_update(match_key, teams_json, matches_json)
 			end
 		end
+		self
 	end
 end
