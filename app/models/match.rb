@@ -16,10 +16,15 @@ class Match < ActiveRecord::Base
 
 		json = matches_json.detect{ |m| m["key"] = key }
 
-		self.red_score  = json["alliances"]["red"]["score"]
-		self.blue_score = json["alliances"]["blue"]["score"]
-		self.number = json["key"].split("_")[1]
-		self.save
+		unless (red_score == json["alliances"]["red"]["score"] &&
+		        blue_score == json["alliances"]["blue"]["score"] &&
+		        number == json["key"].split("_")[1])
+
+			self.red_score = json["alliances"]["red"]["score"]
+			self.blue_score = json["alliances"]["blue"]["score"]
+			self.number = json["key"].split("_")[1]
+			self.save
+		end
 
 		unless teams_json
 			teams_res = tba_request :teams, json["team_keys"].join(",")
