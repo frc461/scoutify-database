@@ -36,27 +36,27 @@ class Match < ActiveRecord::Base
 
 		["red", "blue"].each do |team_color|
 			position_base_num = (team_color == "blue") ? 0 : 3
-			
+
 			json["alliances"][team_color]["teams"].map do |team_key|
 				# Sometimes TBA uses team keys like "frc973B"; ignore these.
 				if teams_json.detect { |t| t["key"] == team_key }
 					team_number = (teams_json.detect { |t| t["key"] == team_key })["team_number"]
 					team = Team.where(number: team_number).first
-					
+
 					unless team
 						team = Team.create
 						team.tba_update team_key
 					end
 				end
-				
+
 				query_string = "" # scope?
-				
+
 				if team_color == "red"
 					query_string = "position < 3 AND team_id == ?"
 				elsif team_color == "blue"
 					query_string = "position >= 3 AND team_id == ?"
 				end
-				
+
 				if records.where(query_string, (team && team.id)).empty?
 					for i in position_base_num..(position_base_num + 2) do
 						if records.where(position: i).empty?
