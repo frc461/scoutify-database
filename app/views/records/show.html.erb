@@ -7,12 +7,12 @@
 
 <p>
   <strong>Team:</strong>
-  <%= @record.team_id %>
+  <%= @record.team ? link_to @record.team.name, @record.team : @record.team_id %>
 </p>
 
 <p>
-  <strong>Event:</strong>
-  <%= @record.event_id %>
+  <strong>Match:</strong>
+  <%= @record.match ? link_to @record.match.number, @record.match : @record.match_id %>
 </p>
 
 <p>

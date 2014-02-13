@@ -1,17 +1,22 @@
 ScoutifyDatabase::Application.routes.draw do
-  resources :matches
 
 	get "welcome/index"
-	resources :records
-
-	resources :teams
-
-	resources :events
-
-	resources :games
 
 	resources :users
-
+	resources :teams
+	resources :games do
+		get "tba_update", on: :member
+		resources :events, only: [:index]
+	end
+	resources :events do
+		get "tba_update", on: :member
+		resources :matches, only: [:index]
+	end
+	resources :matches, except: :index do
+		get "tba_update", on: :member
+		resources :records, only: [:index]
+	end
+	resources :records, except: :index
 
 	# The priority is based upon order of creation: first created -> highest priority.
 	# See how all your routes lay out with "rake routes".
