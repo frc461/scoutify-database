@@ -14,7 +14,7 @@ class Match < ActiveRecord::Base
 			matches_json = MultiJson.load res.body
 		end
 
-		json = matches_json.detect{ |m| m["key"] = key }
+		json = matches_json.detect{ |m| m["key"] == key }
 
 		unless (red_score == json["alliances"]["red"]["score"] &&
 		        blue_score == json["alliances"]["blue"]["score"] &&
@@ -35,7 +35,7 @@ class Match < ActiveRecord::Base
 		end
 
 		["red", "blue"].each do |team_color|
-			position_base_num = (team_color == "blue") ? 0 : 3
+			position_base_num = (team_color == "red") ? 0 : 3
 
 			json["alliances"][team_color]["teams"].map do |team_key|
 				# Sometimes TBA uses team keys like "frc973B"; ignore these.
