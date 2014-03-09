@@ -5,7 +5,10 @@ class Game < ActiveRecord::Base
 	serialize :opr, Hash
 
 	has_many :events
-	has_many :records
+	has_many :teams, through: :events
+	has_many :matches, through: :events
+	has_many :records, through: :matches
+	has_many :playing_teams, through: :records, source: :team
 
 	def tba_update
 		res = tba_request :year, self.year.to_s
@@ -26,10 +29,10 @@ class Game < ActiveRecord::Base
 		scorered = []
 		scoreblue = []
 
-		teamref = events.map(&:teams).flatten.uniq.map(&:number)
+		teamref = playing_teams.distinct.compact.map(&:number)
 		teams = teamref.length
 
-		events.map(&:matches).flatten.each do |match|
+		matches.includes(records: [:team]).each do |match|
 			catch :teams_incomplete do
 				aredrow = Array.new teams, 0
 				abluerow = Array.new teams, 0
@@ -56,7 +59,6 @@ class Game < ActiveRecord::Base
 		puts "Calculating OPR..."
 
 		scoreset.opr.each_with_index do |opr_thing, index|
-			puts teamref[index].to_s + ": " + opr_thing.to_s
 			self.opr[teamref[index]] = opr_thing
 		end
 		self.save

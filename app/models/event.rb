@@ -4,6 +4,7 @@ class Event < ActiveRecord::Base
 
 	belongs_to :game
 	has_many :matches
+	has_many :records, through: :matches
 	has_and_belongs_to_many :teams
 
 	def tba_update(key)
