@@ -16,6 +16,11 @@ class Match < ActiveRecord::Base
 
 		json = matches_json.detect{ |m| m["key"] == key }
 
+		return nil unless json
+		# this can happen if we think there is a third elim match in a group
+		# during the first request, but there isn't during the second request
+		return nil if json["alliances"]["red"]["score"] == -1 && json["alliances"]["blue"]["score"] == -1
+
 		unless (red_score == json["alliances"]["red"]["score"] &&
 		        blue_score == json["alliances"]["blue"]["score"] &&
 		        number == json["key"].split("_")[1])

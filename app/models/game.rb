@@ -1,6 +1,7 @@
 class Game < ActiveRecord::Base
 	require "net/http"
 	include TBA
+	# include OPRCalc
 
 	serialize :opr, Hash
 
@@ -20,7 +21,51 @@ class Game < ActiveRecord::Base
 			event ||= Event.create
 			event.tba_update event_json["key"]
 		end
+
 		self
+	end
+
+	# unfinished madness
+	def update_scoreset
+		ared = []
+		ablue = []
+		scorered = []
+		scoreblue = []
+
+		teamref = [0] + playing_teams.distinct.compact.map(&:number)
+		teams = teamref.length
+
+		matches.includes(records: [:team]).each do |match|
+			catch :teams_incomplete do
+				aredrow = Array.new teams, 0
+				abluerow = Array.new teams, 0
+
+				aredrow[0] = 1
+				abluerow[0] = 1
+
+				match.records.each do |record|
+					throw :teams_incomplete unless record.team
+					index = teamref.index record.team.number
+					if record.position < 3
+						aredrow[index] = 1
+					elsif record.position >= 3
+						abluerow[index] = 1
+					end
+				end
+
+				ared << aredrow
+				ablue << abluerow
+				scorered << [match.red_score]
+				scoreblue << [match.blue_score]
+			end
+		end
+
+		scoreset = OPRCalc::ScoreSet.new (Matrix.rows ared), (Matrix.rows ablue), (Matrix.rows scorered), (Matrix.rows scoreblue)
+
+		# self.opr = scoreset
+		# self.save
+
+		scoreset
 	end
 
 	def opr_update
@@ -61,6 +106,7 @@ class Game < ActiveRecord::Base
 		scoreset.opr.each_with_index do |opr_thing, index|
 			self.opr[teamref[index]] = opr_thing
 		end
+
 		self.save
 	end
 end
